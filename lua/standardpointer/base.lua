@@ -25,7 +25,7 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 vim.opt.tabstop = 4
-vim.o.ftplugin = 'on'
+-- vim.o.ftplugin = 'on'
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.softtabstop = 4
@@ -55,17 +55,17 @@ vim.opt.pumheight = 30
 vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 highlight(0, "DiagnosticsVirtualTextError", { bg = "#ff0000" })
 vim.g.mapleader = " "
+-- vim.opt.shell = "\"C:\\Program Files\\Git\\usr\\bin\\zsh\""
+vim.opt.shell = "cmd.exe"
 -- local original_color = "#2E313A"
 vim.cmd([[let &t_Cs = "\e[4:3m"]])
 vim.cmd([[let &t_Ce = "\e[4:0m"]])
 vim.cmd("highlight Pmenu guibg=NONE")
 vim.cmd([[
-
     set modifiable
     set nofixeol
     highlight LineNR cterm=none ctermfg=Yellow ctermbg=none
     highlight CursorLineNR cterm=bold ctermfg=Black ctermbg=none
-
     set foldlevel=99
     set foldcolumn=0
     set foldmethod=expr

@@ -5,7 +5,28 @@ end
 
 local lspkind = require("lspkind")
 local cmp_npairs = require("nvim-autopairs.completion.cmp")
+
+
+local ls = require "luasnip"
+ls.config.set_config {
+    history = false,
+    updateevents = "TextChanged,TextChangedI",
+}
+
+local is_enabled = function()
+    local in_prompt = vim.api.nvim_get_option_value('buftype', { buf = 0 }) == 'prompt'
+    if in_prompt then
+        return false
+    end
+    local ctx = require("cmp.config.context")
+    return not (ctx.in_treesitter_capture("comment") == true or ctx.in_syntax_group("Comment"))
+end
+
+
+cmp.event:on("confirm_done", cmp_npairs.on_confirm_done())
+
 cmp.setup({
+    enabled = is_enabled,
     snippet = {
         expand = function(args)
             require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
@@ -13,44 +34,10 @@ cmp.setup({
     },
 
     window = {
-        -- completion = cmp.config.window.bordered(),
+        completion = cmp.config.window.bordered(),
         documentation = cmp.config.window.bordered(),
     },
     formatting = {
-        --[[
-        format = function(_, vim_item)
-            local icons = {
-                Text = '', -- Text
-                Method = '', -- Method
-                Function = '', -- Function
-                Constructor = '', -- Constructor
-                Field = '', -- Field
-                Variable = '', -- Variable
-                Class = '', -- Class
-                Interface = 'ﰮ', -- Interface
-                Module = '', -- Module
-                Property = '', -- Property
-                Unit = '', -- Unit
-                Value = '', -- Value
-                Enum = '', -- Enum
-                Keyword = '', -- Keyword
-                Snippet = '﬌', -- Snippet
-                Color = '', -- Color
-                File = '', -- File
-                Reference = '', -- Reference
-                Folder = '', -- Folder
-                EnuMember = '', -- EnumMember
-                Constant = '', -- Constant
-                Struct = '', -- Struct
-                Event = '', -- Event
-                Operator = 'ﬦ', -- Operator
-                TypeParameter = '', -- TypeParameter
-            }
-            vim_item.kind = string.format("%s %s", icons[vim_item.kind], vim_item.kind)
-            return vim_item
-        end,
-        ]]
-        --
         format = lspkind.cmp_format({
             mode = "symbol_text",
             maxwidth = 50,
@@ -64,7 +51,7 @@ cmp.setup({
         ["<C-f>"] = cmp.mapping.scroll_docs(4),
         ["<C-Space>"] = cmp.mapping.complete(),
         ["<C-e>"] = cmp.mapping.abort(),
-        ["<CR>"] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+        ["<CR>"] = cmp.mapping.confirm({ select = false }),
         ["<Tab>"] = function(fallback)
             if cmp.visible() then
                 cmp.select_next_item()
@@ -80,8 +67,6 @@ cmp.setup({
             end
         end,
     }),
-
-    -- TODO: POTENTIAL FILTER TO DISABLE COMPLETION ITEMS BY KIND
     sources = {
         { name = "nvim_lsp" },
         { name = "nvim_lua" },
@@ -89,23 +74,13 @@ cmp.setup({
         { name = "treesitter" },
     },
 })
--- Set configuration for specific filetype.
+
+
+
 cmp.setup.filetype("gitcommit", {
     sources = cmp.config.sources({
-        { name = "cmp_git" }, -- You can specify the `cmp_git` source if you were installed it.
+        { name = "cmp_git" },
     }, {
         { name = "buffer" },
     }),
 })
-
-
-enabled = function()
-    local in_prompt = vim.api.nvim_buf_get_option(0, 'buftype') == 'prompt'
-    if in_prompt then
-        return false
-    end
-    local ctx = require("cmp.config.context")
-    return not (ctx.in_treesitter_capture("comment") == true or ctx.in_syntax_group("Comment"))
-end
-
-cmp.event:on("confirm_done", cmp_npairs.on_confirm_done())

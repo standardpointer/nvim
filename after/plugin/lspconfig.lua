@@ -9,8 +9,6 @@ local util = nvimlsp.util
 local bufnr = vim.api.nvim_get_current_buf()
 local bufname = vim.api.nvim_buf_get_name(bufnr)
 
--- Setup nvim-cmp.
-
 local opts = {
     noremap = true,
     silent = true,
@@ -25,14 +23,7 @@ vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local protocol = require("vim.lsp.protocol")
--- BEGIN ATTACH
 local on_attach = function(client, bufnr)
-    -- Enable completion triggered by <c-x><c-o>
-    vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-
-    -- Mappings.
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
-
     vim.lsp.inlay_hint.enable(bufnr)
     local bufopts = { noremap = true, silent = true, buffer = bufnr }
     vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
@@ -49,21 +40,16 @@ local on_attach = function(client, bufnr)
     vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, bufopts)
     vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, bufopts)
     vim.keymap.set("n", "<space>f", vim.lsp.buf.formatting, bufopts)
-    --  local opts = { noremap=true, silent=true }
 end
 
--- END ATTACH
 local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities(protocol.make_client_capabilities())
 
 local fold_capabilities = vim.lsp.protocol.make_client_capabilities()
 fold_capabilities.textDocument.foldingRange = {
     dynamicRegistration = false,
-    --    lineFoldingOnly = true,
 }
 
--- BEGINS FLAGS
 local lsp_flags = {
-    -- This is the default in Nvim 0.7+
     debounce_text_changes = 150,
 }
 
@@ -92,16 +78,16 @@ local set_fallback_flags = function()
     return fallback_flags
 end
 
--- END FLAGS
 local clangd_path = ""
 if name == "Darwin" then
     clangd_path = clangd_path .. "clangd"
 else
-    clangd_path = clangd_path .. "C:/msys64/ucrt64/bin/clangd"
+    clangd_path = clangd_path .. "C:/msys64/mingw64/bin/clangd"
 end
 
+-- MAIN LANGUAGE SERVER SETUP
 nvimlsp["clangd"].setup({
-    on_attach = on_attach,
+    -- on_attach = on_attach,
     flags = lsp_flags,
     capabilities = cmp_capabilities,
     cmd = {
@@ -125,7 +111,7 @@ nvimlsp["clangd"].setup({
 })
 
 nvimlsp["pyright"].setup({
-    on_attach = on_attach,
+    -- -- on_attach = on_attach,
     flags = lsp_flags,
     capabilities = cmp_capabilities,
     cmd = { "pyright-langserver", "--stdio" },
@@ -143,7 +129,7 @@ nvimlsp["pyright"].setup({
     },
 })
 
-local rt_ops = {
+local rt_opts = {
     tools = {
         runnables = {
             use_telescope = true,
@@ -157,15 +143,15 @@ local rt_ops = {
     },
 }
 
-local rt_status, rust_tools = pcall(require, "rust-tools")
-if not rt_status then return end
-rust_tools.setup(rt_opts)
+--local rt_status, rust_tools = pcall(require, "rust-tools")
+--if not rt_status then return end
+--rust_tools.setup(rt_opts)
 
 
 nvimlsp["rust_analyzer"].setup({
-    on_attach = on_attach,
+    -- on_attach = on_attach,
     flags = lsp_flags,
-    -- capabilities = cmp_capabilities,
+    capabilities = cmp_capabilities,
     cmd = { "rust-analyzer" },
     filetypes = { "rust" },
     settings = {
@@ -186,7 +172,7 @@ nvimlsp["rust_analyzer"].setup({
 })
 
 nvimlsp["jdtls"].setup({
-    on_attach = on_attach,
+    -- on_attach = on_attach,
     flags = lsp_flags,
     capabilities = cmp_capabilities,
     root_dir = function()
@@ -218,7 +204,7 @@ nvimlsp["lua_ls"].setup({
 })
 
 nvimlsp["gopls"].setup({
-    on_attach = on_attach,
+    -- on_attach = on_attach,
     capabilities = cmp_capabilities,
 })
 
@@ -231,7 +217,7 @@ nvimlsp["dockerls"].setup({
 })
 
 nvimlsp["bashls"].setup({
-    on_attach = on_attach,
+    -- on_attach = on_attach,
     capabilities = cmp_capabilities,
     cmd = { "bash-language-server", "start" },
     cmd_env = { GLOB_PATTERN = "*@(.sh|.zshrc)" },
@@ -243,7 +229,7 @@ nvimlsp["bashls"].setup({
 
 nvimlsp["cmake"].setup({
     capabilities = cmp_capabilities,
-    on_attach = on_attach,
+    -- on_attach = on_attach,
     cmd = { "cmake-language-server" },
     filetypes = { "cmake" },
     single_file_support = true,
@@ -261,9 +247,8 @@ if name == "Darwin" then
     vscode = vscode
     s_path = "/Users/jonahperry/Library/pnpm/global/5/node_modules/typescript/lib/tsserverlibrary.js"
 elseif name == "Windows_NT" then
-    ts = ts .. ".cmd"
-    vscode = vscode .. ".cmd"
-    s_path = "C:/Users/jonah/AppData/Local/pnpm/global/5/node_modules/typescript/lib/tsserverlibrary.js"
+    ts = ts
+    vscode = vscode
 end
 
 nvimlsp["html"].setup({
@@ -276,7 +261,7 @@ nvimlsp["html"].setup({
 })
 
 nvimlsp["tsserver"].setup({
-    on_attach = on_attach,
+    -- on_attach = on_attach,
     filetypes = {
         "javascript",
         "javascriptreact",
@@ -294,7 +279,7 @@ nvimlsp["tsserver"].setup({
 })
 
 nvimlsp["tailwindcss"].setup({
-    on_attach = on_attach,
+    -- on_attach = on_attach,
     capabilities = cmp_capabilities,
     filetypes = {
         "astro",
@@ -331,7 +316,7 @@ nvimlsp["tailwindcss"].setup({
 })
 
 nvimlsp["astro"].setup({
-    on_attach = on_attach,
+    -- on_attach = on_attach,
     capabilities = cmp_capabilities,
     cmd = { "astro-ls", "--stdio" },
     filetypes = { "astro" },
@@ -345,7 +330,7 @@ nvimlsp["astro"].setup({
 })
 
 nvimlsp["zls"].setup({
-    on_attach = on_attach,
+    -- on_attach = on_attach,
 })
 
 local function get_language_id()
@@ -366,7 +351,7 @@ local function get_language_id()
 end
 nvimlsp['ocamllsp'].setup({
     cmd = { "ocamllsp" },
-    on_attach = on_attach,
+    -- on_attach = on_attach,
     capabilities = cmp_capabilities,
     get_language_id = get_language_id,
     filetypes = { "ocaml", "ocaml.interface", "ocaml.ocamllex", "reason", "dune" },

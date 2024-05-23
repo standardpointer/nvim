@@ -1,5 +1,7 @@
 local status, treesitter_conf = pcall(require, "nvim-treesitter.configs")
 local status2, treesitter_install = pcall(require, "nvim-treesitter.install")
+require 'nvim-treesitter.install'.compilers = { "clang", "gcc" }
+
 local vim = vim
 if not status or not status2 then
     return
@@ -25,10 +27,12 @@ treesitter_conf.setup({
         "typescript",
         "tsx",
         "vim",
-        "help",
         "python",
+        "vimdoc"
     },
     indent = { enable = true, disable = { "python" } },
+
+
 
     sync_install = false,
 

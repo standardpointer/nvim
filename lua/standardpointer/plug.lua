@@ -62,7 +62,7 @@ return require("lazy").setup({
     "lukas-reineke/indent-blankline.nvim",
     "nvim-tree/nvim-tree.lua",
     "ziglang/zig.vim",
-    "simrat39/rust-tools.nvim",
+    -- "simrat39/rust-tools.nvim",
 
     -- install without yarn or npm
     {
