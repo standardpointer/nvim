@@ -24,7 +24,7 @@ end
 
 
 cmp.event:on("confirm_done", cmp_npairs.on_confirm_done())
-
+local WIDE_HEIGHT = 40
 cmp.setup({
     enabled = is_enabled,
     snippet = {

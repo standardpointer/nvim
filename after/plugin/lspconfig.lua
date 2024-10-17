@@ -159,6 +159,18 @@ local rt_opts = {
     },
 }
 
+nvimlsp["csharp_ls"].setup({
+    cmd = { "csharp-ls" },
+    filetypes = { "cs" },
+    init_options = {
+        AutomaticWorkspaceInit = true,
+    },
+    root_dir = function(fname)
+        return util.root_pattern('*.sln', '*.csproj', '.git')(fname) or util.path.dirname(fname)
+    end,
+    single_file_support = true,
+})
+
 --local rt_status, rust_tools = pcall(require, "rust-tools")
 --if not rt_status then return end
 --rust_tools.setup(rt_opts)
