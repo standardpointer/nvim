@@ -88,6 +88,22 @@ end
 -- MAIN LANGUAGE SERVER SETUP
 nvimlsp["clangd"].setup({
     -- on_attach = on_attach,
+    on_attach = function(client, bufnr)
+        -- Modify diagnostic behavior (optional)
+        vim.lsp.handlers["textDocument/publishDiagnostics"] = function(_, result, ctx, config)
+            if not result then return end
+            local diagnostics = result.diagnostics
+            -- Filter out "no global header found" error
+            local filtered_diagnostics = {}
+            for _, diagnostic in ipairs(diagnostics) do
+                if diagnostic.message and not diagnostic.message:find("no global module included") then
+                    table.insert(filtered_diagnostics, diagnostic)
+                end
+            end
+            result.diagnostics = filtered_diagnostics
+            vim.lsp.diagnostic.on_publish_diagnostics(_, result, ctx, config)
+        end
+    end,
     flags = lsp_flags,
     capabilities = cmp_capabilities,
     cmd = {
@@ -260,7 +276,7 @@ nvimlsp["html"].setup({
     },
 })
 
-nvimlsp["tsserver"].setup({
+nvimlsp["ts_ls"].setup({
     -- on_attach = on_attach,
     filetypes = {
         "javascript",
