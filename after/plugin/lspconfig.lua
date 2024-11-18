@@ -96,7 +96,7 @@ nvimlsp["clangd"].setup({
             -- Filter out "no global header found" error
             local filtered_diagnostics = {}
             for _, diagnostic in ipairs(diagnostics) do
-                if diagnostic.message and not diagnostic.message:find("no global module included") then
+                if diagnostic.message and not diagnostic.message:find("No global header file was included!") then
                     table.insert(filtered_diagnostics, diagnostic)
                 end
             end

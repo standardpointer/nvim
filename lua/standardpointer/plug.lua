@@ -26,7 +26,7 @@ return require("lazy").setup({
         end,
     },
 
-    { 'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons' },
+    --{ 'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons' },
     "justinhj/battery.nvim",
     -- LSP + bells n whistles  autocomplete, autopairs, etc.
     "neovim/nvim-lspconfig",
