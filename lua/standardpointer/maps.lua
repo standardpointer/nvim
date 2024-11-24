@@ -5,6 +5,8 @@ vim.g.mapleader = " "
 local bufnr = vim.api.nvim_get_current_buf()
 local bufname = vim.api.nvim_buf_get_name(bufnr)
 
+local name = vim.loop.os_uname().sysname
+
 local map = function(mode, lhs, rhs, opts)
     local options = { noremap = true }
     if opts then
@@ -16,7 +18,7 @@ end
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "c",
     callback = function()
-        if vim.loop.os_uname().sysname == "Windows_NT" then
+        if name == "Windows_NT" then
             map("n", "<C-g>", ":!gcc -Wall -std=gnu2x % -o %:r.exe<CR>")
             map("n", "<C-f>", ":!%:r.exe<CR>")
         else
@@ -28,7 +30,7 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "cpp",
     callback = function()
-        if vim.loop.os_uname().sysname == "Windows_NT" then
+        if name == "Windows_NT" then
             map("n", "<C-g>", ":!g++ % -o %:r.exe<CR>")
             map("n", "<C-f>", ":!%:r.exe<CR>")
         else
@@ -46,25 +48,34 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
-if vim.loop.os_uname().sysname == "Darwin" then
+if name == "Darwin" then
     map("n", "<C-p>", ":!python3 %<CR>")
 elseif vim.fn.has("win32") then
     map("n", "<C-p>", ":!python %<CR>")
 end
-map("i", "<C-Return>", "<CR><CR><C-o>k<Tab>")
+
 map("n", "<S-t>", "::tabnew<CR>")
 map("n", "<leader>m", ":lua vim.diagnostic.open_float()<CR>")
 map("n", "<S-?>", ":!node %<CR>")
 map("n", "<A-q>", ":q<kEnter>")
-map("v", "C-<", "<gv", { noremap = true })
-map("v", "C->", ">gv", { noremap = true })
-map("n", "<C-]>", ":vsplit<CR>")
-map("n", "<C-\\>", ":split<CR>")
+map("n", "<Tab>", ">>", { noremap = true })
+map('n', '<S-Tab>', '<<', { noremap = true, silent = true })
+map("v", "<Tab>", ">gv", { noremap = true })
+map('v', '<S-Tab>', '<gv', { noremap = true, silent = true })
+map("n", "<C-S-\\>", ":split<CR>")
+map("n", "<shift>", ":echo hello")
+map("n", "<C-\\>", ":vsplit<CR>")
+map('n', '<C-n>', ':vsplit | enew | echo "Save the file with :w filename"<CR>', { noremap = true, silent = false })
 map("n", "<S-Right>", "<C-w>l <CR>")
-map("n", "<C-n>", ":NvimTreeToggle<kEnter>")
+map("n", "<C-b>", ":NvimTreeToggle<kEnter>")
 map("n", "<S-Left>", "<C-w>h <CR>")
 map("n", "<C-0>", "<cmd>TroubleToggle<CR>", { noremap = true })
 map("n", "gp", "`[v`]")
-map('v', '<C-/>', ':call nerdcommenter#Comment(0, "toggle")<CR>', { noremap = true, silent = true })
-map('n', '<C-/>', ':call nerdcommenter#Comment(0, "toggle")<CR>', { noremap = true, silent = true })
+if name == "Windows_NT" then
+    map('v', '<C-_>', ':call nerdcommenter#Comment(0, "toggle")<CR>', { noremap = true, silent = true })
+    map('n', '<C-_>', ':call nerdcommenter#Comment(0, "toggle")<CR>', { noremap = true, silent = true })
+else
+    map('v', '<C-/', ':call nerdcommenter#Comment(0, "toggle")<CR>', { noremap = true, silent = true })
+    map('n', '<C-/>', ':call nerdcommenter#Comment(0, "toggle")<CR>', { noremap = true, silent = true })
+end
 map('n', '<C-m>', ':MarkdownPreviewToggle<CR>', { noremap = true, silent = true })
