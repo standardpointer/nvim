@@ -91,7 +91,9 @@ nvimlsp["clangd"].setup({
     on_attach = function(client, bufnr)
         -- Modify diagnostic behavior (optional)
         vim.lsp.handlers["textDocument/publishDiagnostics"] = function(_, result, ctx, config)
-            if not result then return end
+            if not result then
+                return
+            end
             local diagnostics = result.diagnostics
             -- Filter out "no global header found" error
             local filtered_diagnostics = {}
@@ -123,7 +125,7 @@ nvimlsp["clangd"].setup({
         "compile_flags.txt",
         ".git"
     ),
-    util.path.dirname,
+    vim.fs.dirname,
 })
 
 nvimlsp["pyright"].setup({
@@ -145,20 +147,6 @@ nvimlsp["pyright"].setup({
     },
 })
 
-local rt_opts = {
-    tools = {
-        runnables = {
-            use_telescope = true,
-        },
-        inlay_hints = {
-            auto = true,
-            show_parameter_hints = false,
-            parameter_hints_prefix = "",
-            other_hints_prefix = "",
-        },
-    },
-}
-
 nvimlsp["csharp_ls"].setup({
     cmd = { "csharp-ls" },
     filetypes = { "cs" },
@@ -166,15 +154,10 @@ nvimlsp["csharp_ls"].setup({
         AutomaticWorkspaceInit = true,
     },
     root_dir = function(fname)
-        return util.root_pattern('*.sln', '*.csproj', '.git')(fname) or util.path.dirname(fname)
+        return util.root_pattern("*.sln", "*.csproj", ".git")(fname) or util.path.dirname(fname)
     end,
     single_file_support = true,
 })
-
---local rt_status, rust_tools = pcall(require, "rust-tools")
---if not rt_status then return end
---rust_tools.setup(rt_opts)
-
 
 nvimlsp["rust_analyzer"].setup({
     -- on_attach = on_attach,
@@ -183,7 +166,7 @@ nvimlsp["rust_analyzer"].setup({
     cmd = { "rust-analyzer" },
     filetypes = { "rust" },
     settings = {
-        ['rust_analyzer'] = {
+        ["rust_analyzer"] = {
             imports = {
                 granularity = {
                     group = "module",
@@ -192,8 +175,8 @@ nvimlsp["rust_analyzer"].setup({
             },
             diagnostics = {
                 enable = false,
-            }
-        }
+            },
+        },
     },
     single_file_support = true,
     root_dir = util.root_pattern("Cargo.toml", "rust-project.json"),
@@ -366,22 +349,29 @@ local function get_language_id()
     -- For example, you can check the file's extension or look for specific content patterns.
 
     -- Example: Check if the file has a .ml extension.
-    if vim.fn.expand('%:e') == 'ml' then
-        return 'ocaml' -- Set the language ID to 'ocaml' for OCaml files.
+    if vim.fn.expand("%:e") == "ml" then
+        return "ocaml" -- Set the language ID to 'ocaml' for OCaml files.
     end
 
-    if vim.fn.expand('%:e') == 're' then
-        return 'reason'
+    if vim.fn.expand("%:e") == "re" then
+        return "reason"
     end
 
     -- Return a default language ID if no specific criteria match.
-    return 'plaintext'
+    return "plaintext"
 end
-nvimlsp['ocamllsp'].setup({
+nvimlsp["ocamllsp"].setup({
     cmd = { "ocamllsp" },
     -- on_attach = on_attach,
     capabilities = cmp_capabilities,
     get_language_id = get_language_id,
     filetypes = { "ocaml", "ocaml.interface", "ocaml.ocamllex", "reason", "dune" },
-    root_dir = nvimlsp.util.root_pattern("*.opam", "esy.json", "package.json", ".git", "dune-project", "dune-workspace")
+    root_dir = nvimlsp.util.root_pattern(
+        "*.opam",
+        "esy.json",
+        "package.json",
+        ".git",
+        "dune-project",
+        "dune-workspace"
+    ),
 })

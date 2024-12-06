@@ -65,7 +65,6 @@ local options = {
             button(";", "  Recent File", ":Telescope oldfiles<CR>"),
             button(";r", "  Find Word", ":Telescope live_grep<CR>"),
             button(";b", "  Bookmarks", ":Telescope marks<CR>"),
-            button(";s", "  Settings", ":e $MYVIMRC | :cd %:p:h | :split . | :wincmd w | :pwd<CR>"),
             button(";q", "  Exit Neovim", ":qa<CR>"),
         },
         opts = { spacing = 1 },

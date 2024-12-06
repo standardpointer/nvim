@@ -1,5 +1,3 @@
-local vim = vim
-
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
     vim.fn.system({
@@ -26,9 +24,7 @@ return require("lazy").setup({
         end,
     },
 
-    --{ 'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons' },
     "justinhj/battery.nvim",
-    -- LSP + bells n whistles  autocomplete, autopairs, etc.
     "neovim/nvim-lspconfig",
     "lvimuser/lsp-inlayhints.nvim",
     "hrsh7th/cmp-nvim-lsp",
@@ -38,8 +34,8 @@ return require("lazy").setup({
     "anuvyklack/pretty-fold.nvim",
     "anuvyklack/fold-preview.nvim",
     "anuvyklack/keymap-amend.nvim",
-    'danielo515/nvim-treesitter-reason',
-    'preservim/nerdcommenter',
+    "danielo515/nvim-treesitter-reason",
+    "preservim/nerdcommenter",
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
@@ -63,15 +59,17 @@ return require("lazy").setup({
     "lukas-reineke/indent-blankline.nvim",
     "nvim-tree/nvim-tree.lua",
     "ziglang/zig.vim",
-    -- "simrat39/rust-tools.nvim",
-
-    -- install without yarn or npm
-    {
-        "iamcco/markdown-preview.nvim",
-        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-        ft = { "markdown" },
-        build = function() vim.fn["mkdp#util#install"]() end,
-    }
-
-
+    "OXY2DEV/markview.nvim",
+    -- {
+    --     "iamcco/markdown-preview.nvim",
+    --     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    --     build = "pnpm install",
+    --     ft = { "markdown" },
+    --     init = function()
+    --         vim.g.mkdp_filetypes = { "markdown" }
+    --     end,
+    --     config = function()
+    --         require("markdown-preview")
+    --     end,
+    -- },
 })
