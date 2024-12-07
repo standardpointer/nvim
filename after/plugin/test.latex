@@ -1,0 +1,11 @@
+\documentclass{article}
+\usepackage{amsmath}
+
+\begin{document}
+
+
+\begin{equation}
+\int_a^b x^2 \, dx = \frac{b^3}{3} - \frac{a^3}{3}
+\end{equation}
+
+\end{document}

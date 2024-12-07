@@ -28,7 +28,12 @@ treesitter_conf.setup({
         "tsx",
         "vim",
         "python",
-        "vimdoc"
+        "vimdoc",
+        "latex",
+        "zig",
+        "powershell",
+        "swift",
+        "asm"
     },
     indent = { enable = true, disable = { "python" } },
 
@@ -45,9 +50,6 @@ treesitter_conf.setup({
         -- list of language that will be disabled
         -- disable = { "c", "rust" },
         additional_vim_regex_highlighting = false,
-    },
-    autotag = {
-        enable = true,
     },
     --
 })
