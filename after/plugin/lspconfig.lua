@@ -47,9 +47,9 @@ local set_fallback_flags = function()
         pattern = "cpp",
         callback = function()
             if name == "Darwin" then
-                fallback_flags = { "-target=arm64-apple-darwin", "-std=c++2a", "-Wall" }
+                fallback_flags = { "-target=arm64-apple-darwin", "-std=c++23", "-Wall" }
             else
-                fallback_flags = { "-target=x86_64-w64-windows-gnu", "-std=c++17", "-Wall" }
+                fallback_flags = { "-target=x86_64-w64-windows-gnu", "-std=c++23", "-Wall" }
             end
         end,
     })
@@ -141,7 +141,7 @@ nvimlsp["csharp_ls"].setup({
         AutomaticWorkspaceInit = true,
     },
     root_markers = function(fname)
-        return util.root_pattern("*.sln", "*.csproj", ".git")(fname) or util.path.dirname(fname)
+        return util.root_pattern("*.sln", "*.csproj", ".git")(fname)
     end,
     single_file_support = true,
 })
