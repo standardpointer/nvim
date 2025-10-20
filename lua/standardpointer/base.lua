@@ -1,5 +1,7 @@
 require("standardpointer.maps")
 require("standardpointer.plug")
+-- Automatically start LSP servers based on filetype
+local lsp = require("lspconfig")
 local os = require("os")
 local vim = vim
 local group = vim.api.nvim_create_augroup
@@ -8,7 +10,7 @@ local highlight = vim.api.nvim_set_hl
 local nightfox = require("nightfox")
 
 local name = vim.loop.os_uname().sysname
-local home = os.getenv("home")
+local home = os.getenv("HOME")
 
 if name == "Windows_NT" then
     -- INIT CONFIG; WINDOWS
@@ -153,6 +155,7 @@ local specs = {
     },
 }
 
+
 --catp.setup({
 --flavour = "mocha",
 --color_overrides = {
@@ -173,7 +176,7 @@ vim.notify = function(msg, level, opts)
         type(msg) == "string"
         and msg:match('vim%.tbl_islist is deprecated, Run ":checkhealth vim.deprecated" for more information')
     then
-        return -- Suppress the warning
+        return                        -- Suppress the warning
     end
     original_notify(msg, level, opts) -- Show other notifications normally
 end

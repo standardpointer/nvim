@@ -1,6 +1,6 @@
 -- Safe require alpha. No point in continuing if alpha is not present
 local os = require("os")
-local home = os.getenv("home")
+local home = os.getenv("HOME")
 package.path = home .. "/.config/nvim/after/plugin/?.lua;;" .. package.path
 
 local status, alpha = pcall(require, "alpha")

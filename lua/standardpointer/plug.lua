@@ -41,6 +41,14 @@ return require("lazy").setup({
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
     },
+    -- {
+    --     "gruvw/strudel.nvim",
+    --     cmd = "StrudelLaunch",
+    --     build = "npm install",
+    --     config = function()
+    --         require("strudel").setup()
+    --     end,
+    -- },
     "windwp/nvim-ts-autotag",
     "nvim-lua/popup.nvim",
     "nvim-lua/plenary.nvim",

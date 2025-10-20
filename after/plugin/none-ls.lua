@@ -9,6 +9,14 @@ local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
 local config = {
     on_attach = function(client, bufnr)
+        for _, other in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
+            if other.name == "null-ls" then
+                vim.schedule(function()
+                    vim.lsp.buf_detach_client(bufnr, client.id)
+                end)
+                return
+            end
+        end
         if client.supports_method("textDocument/formatting") then
             vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
             vim.api.nvim_create_autocmd("BufWritePre", {
@@ -44,4 +52,4 @@ local config = {
     },
 }
 
-null_ls.setup(config)
+-- null_ls.setup(config)
