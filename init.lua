@@ -91,6 +91,6 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.lsp.enable(server)
     vim.defer_fn(function()
       vim.lsp.start(conf)
-    end, 20)
+    end, 30)
   end,
 })

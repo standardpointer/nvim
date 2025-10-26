@@ -155,15 +155,6 @@ local specs = {
     },
 }
 
-
---catp.setup({
---flavour = "mocha",
---color_overrides = {
---all = {
---overlay0 = "#99a4b2",
---},
---},
---})
 nightfox.setup({ palettes = palettes, specs = specs })
 -- vim.cmd.colorscheme("catppuccin")
 vim.cmd.colorscheme("nordfox")
